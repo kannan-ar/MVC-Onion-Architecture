@@ -1,0 +1,28 @@
+﻿@using iH.UI.ViewModels
+
+@model List<MenuViewModel>
+
+@{
+    Layout = "";
+}
+
+@foreach (var menu in Model)
+{
+    if (!menu.HasChildren)
+    {
+        <li><a href="@menu.Item.MenuUrl">@menu.Item.MenuName</a></li>
+    }
+    else
+    {
+        <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="@menu.Item.MenuUrl">@menu.Item.MenuName<span class="caret"></span></a>
+            <ul class="dropdown-menu">
+                @foreach (var subMenu in menu.Children)
+                {
+                    <li><a href="@subMenu.MenuUrl">@subMenu.MenuName</a></li>
+                }
+            </ul>
+        </li>
+    }
+}
+

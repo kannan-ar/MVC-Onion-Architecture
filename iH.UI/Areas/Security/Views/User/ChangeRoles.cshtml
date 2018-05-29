@@ -1,0 +1,33 @@
+﻿@using iH.ViewModels
+
+@model UserRolesViewModel
+@{
+    ViewBag.Title = "Change Roles";
+}
+
+<div class="row">
+    <div class="col-sm-4"></div>
+    <div class="col-sm-4">
+        <div class="well">
+            @using (Html.BeginForm("ChangeRoles", "User", FormMethod.Post))
+            {
+                <div class="form-group">
+                    @Html.Label(Model.User.UserName)
+                </div>
+                <div class="form-group">
+                    <ul class="list-group">
+                        @foreach (var role in Model.Roles)
+                        {
+                            <li class="list-group-item">
+                                <input type="checkbox" name="SelectedRoles" checked="@Model.SelectedRoles.Contains(role.RoleId)" value="@role.RoleId" />@role.RoleName
+                            </li>
+                        }
+                    </ul>
+                </div>
+                <input type="submit" value="Change" class="btn btn-primary" />
+                <a href="\Security\User\List" class="btn btn-danger">Cancel</a>
+            }
+        </div>
+    </div>
+    <div class="col-sm-4"></div>
+</div>

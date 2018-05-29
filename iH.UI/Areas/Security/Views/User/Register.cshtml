@@ -1,0 +1,70 @@
+﻿@using iH.ViewModels
+
+@model RegisterUserViewModel
+
+@{
+    ViewBag.Title = "Register User";
+}
+
+<div class="row">
+    <div class="col-sm-4"></div>
+    <div class="col-sm-4">
+        <div class="well">
+            @using (Html.BeginForm("Register", "User", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken();
+                <div class="form-group">
+                    @Html.Label("User Name")
+                    @Html.TextBoxFor(u => u.UserName, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(u => u.UserName)
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(u => u.Password)
+                    @Html.TextBoxFor(u => u.Password, new { type = "password", @class = "form-control" })
+                    @Html.ValidationMessageFor(u => u.Password)
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(u => u.ConfirmPassword, "Confirm Password")
+                    @Html.TextBoxFor(u => u.ConfirmPassword, new { type = "password", @class = "form-control" })
+                    @Html.ValidationMessageFor(u => u.ConfirmPassword)
+                </div>
+                <div class="form-group">
+                    <ul class="list-group">
+                        @foreach (var role in ViewBag.Roles)
+                        {
+                            <li class="list-group-item">
+                                <input type="checkbox" name="SelectedRoles" value="@role.RoleId" />@role.RoleName
+                            </li>
+                        }
+                    </ul>
+                </div>
+                <input type="submit" value="Register" class="btn btn-primary" />
+                if (ViewBag.Message != null)
+                {
+                    <br />
+                    <div class="label label-danger">
+                        @foreach (var msg in ViewBag.Message)
+                        {
+                            @msg
+                        }
+                    </div>
+                }
+            }
+        </div>
+    </div>
+    <div class="col-sm-4"></div>
+</div>
+@section Scripts
+{
+    <script type="text/javascript">
+        $(function () {
+            $.ajax({
+                method: "GET",
+                url: "/Test/Index",
+                success: function (data, textStatus, jqXHR) {
+                    console.log(data);
+                }
+            });
+        });
+    </script>
+}

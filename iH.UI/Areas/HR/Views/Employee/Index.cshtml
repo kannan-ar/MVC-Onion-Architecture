@@ -1,0 +1,123 @@
+﻿@using iH.ViewModels
+@using iH.UI.Code
+
+@model EmployeeViewModel
+
+@{
+    ViewBag.Title = "Manage Employee";
+}
+
+@using (Html.BeginForm("Index", "Employee", FormMethod.Post))
+{
+    @Html.AntiForgeryToken();
+<div class="row">
+    <div class="col-sm-1"></div>
+    <div class="col-sm-4">
+        <div class="form-group">
+            @Html.Label("Employee Name")
+            @Html.TextBoxFor(e => e.EmployeeName, new { @class = "form-control" })
+            @Html.ValidationMessageFor(e => e.EmployeeName)
+        </div>
+        <div class="form-group">
+            @Html.Label("Employee No")
+            @Html.TextBoxFor(e => e.EmployeeNo, new { @class = "form-control" })
+            @Html.ValidationMessageFor(e => e.EmployeeNo)
+        </div>
+        <div class="form-group">
+            @Html.Label("Permanent City")
+            @Html.DropDownListFor(e => e.PermanentCityId, new SelectList(Model.Cities, "CityId", "CityName"), "Select Permanent City", new { @class = "form-control" })
+            @Html.ValidationMessageFor(e => e.PermanentCityId)
+        </div>
+        <div class="form-group">
+            @Html.Label("Communication City")
+            @Html.DropDownListFor(e => e.CommunicationCityId, new SelectList(Model.Cities, "CityId", "CityName"), "Select Communication City", new { @class = "form-control" })
+            @Html.ValidationMessageFor(e => e.CommunicationCityId)
+        </div>
+        <div class="form-group">
+            @Html.Label("Nationality")
+            @Html.DropDownListFor(e => e.NationalityId, new SelectList(Model.Nationalities, "NationalityId", "NationalityName"), "Select Nationality", new { @class = "form-control" })
+            @Html.ValidationMessageFor(e => e.NationalityId)
+        </div>
+        <div class="form-group">
+            @Html.Label("Permanent Address")
+            @Html.TextAreaFor(e => e.PermanentAddress, 4, 6, new { @class = "form-control" })
+            @Html.ValidationMessageFor(e => e.PermanentAddress)
+        </div>
+        <div class="form-group">
+            @Html.Label("Communication Address")
+            @Html.TextAreaFor(e => e.CommunicationAddress, 4, 6, new { @class = "form-control" })
+            @Html.ValidationMessageFor(e => e.CommunicationAddress)
+        </div>
+        <div class="form-group">
+            @Html.Label("Gender") &nbsp;
+            @Html.RadioButtonFor(e => e.Gender, "M")Male&nbsp;
+            @Html.RadioButtonFor(e => e.Gender, "F")Female
+            @Html.ValidationMessageFor(e => e.Gender)
+        </div>
+    </div>
+    <div class="col-sm-1"></div>
+    <div class="col-sm-4">
+        <div class="form-group">
+            @Html.LabelFor(e => e.Status)
+            @Html.DropDownListFor(e => e.Status, new SelectList(Model.EmployeeStatus, "StatusId", "StatusName"), "Select Employee Status", new { @class = "form-control" })
+            @Html.ValidationMessageFor(e => e.Status)
+        </div>
+        <div class="form-group">
+            @Html.Label("Designation")
+            @Html.DropDownListFor(e => e.DesignationId, new SelectList(Model.Designations, "DesignationId", "DesignationName"), "Select Designation", new { @class = "form-control" })
+            @Html.ValidationMessageFor(e => e.DesignationId)
+        </div>
+        <div class="form-group">
+            @Html.Label("Department")
+            @Html.DropDownListFor(e => e.DepartmentId, new SelectList(Model.Departments, "DepartmentId", "DepartmentName"), "Select Department", new { @class = "form-control" })
+            @Html.ValidationMessageFor(e => e.DepartmentId)
+        </div>
+        <div class="form-group">
+            @Html.Label("Location")
+            @Html.DropDownListFor(e => e.LocationId, new SelectList(Model.Locations, "LocationId", "LocationName"), "Select Location", new { @class = "form-control" })
+            @Html.ValidationMessageFor(e => e.LocationId)
+        </div>
+        <div class="form-group">
+            @Html.Label("Date of Join")
+            @Html.TextBoxFor(e => e.DateOfJoin, "{0:MM/dd/yyyy}", new { @class = "form-control date-control datepicker" })
+            @Html.ValidationMessageFor(e => e.DateOfJoin)
+        </div>
+        <div class="form-group">
+            @Html.Label("Offcial DOB")
+            @Html.TextBoxFor(e => e.OffcialDOB, "{0:MM/dd/yyyy}", new { @class = "form-control date-control datepicker" })
+            @Html.ValidationMessageFor(e => e.OffcialDOB)
+        </div>
+        <div class="form-group">
+            @Html.Label("Card Number")
+            @Html.TextBoxFor(e => e.CardNumber, new { @class = "form-control" })
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(e => e.Email)
+            @Html.TextBoxFor(e => e.Email, new { @class = "form-control" })
+            @Html.ValidationMessageFor(e => e.Email)
+        </div>
+        @if (Model.UserId == null)
+        {
+        <div class="form-group">
+            @Html.CheckBoxFor(e => e.CreateUser)
+            @Html.Label("Create User")
+        </div>
+        }
+        <input type="submit" value="Save" class="btn btn-primary" />
+    </div>
+    <div class="col-sm-2"></div>
+</div>
+}
+
+@section Scripts
+{
+<script type="text/javascript" src="~/Scripts/bootstrap-datepicker.min.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $('.datepicker').datepicker({
+            format: "@iHSettings.DateFormat",
+            autoclose: true
+        });
+    });
+</script>
+}

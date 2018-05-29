@@ -1,0 +1,95 @@
+﻿@using iH.ViewModels
+
+@model RegisterRoleViewModel
+
+<div class="row">
+    <div class="col-sm-1"></div>
+    <div class="col-sm-4">
+        <table class="table table-striped table-bordered">
+            <tr>
+                <th style="width:95%">Role</th>
+                <th style="width:5%"></th>
+            </tr>
+            @foreach (var role in Model.Roles)
+            {
+                <tr>
+                    <td>@role.RoleName</td>
+                    <td>
+                        <a href="@Url.Action("Edit" , new { id = role.RoleId })">Edit</a>
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+    <div class="col-sm-1"></div>
+    <div class="col-sm-4">
+        @using (Html.BeginForm("Edit", "Role", new { id = Model.Id }))
+        {
+            <div class="row">
+                <div class="col-sm-12">
+                    @Html.Label("Role Name")
+                    @Html.TextBoxFor(m => m.SelectedRoleName)
+                    @Html.ValidationMessageFor(m => m.SelectedRoleName)
+                </div>
+            </div>
+            <div class="row top10">
+                <div class="col-sm-12">
+                    <h4>Permission Levels</h4>
+                </div>
+                <div class="col-sm-12">
+                    @foreach (var item in Model.PermissionLevels)
+                    {
+                        <div><input type="checkbox" name="SelectedPermissionLevels" checked="@Model.SelectedPermissionLevels.Contains(item)" value="@item" />@item</div>
+                    }
+
+                    @Html.ValidationMessageFor(m => m.SelectedPermissionLevels)
+                </div><br />
+                <div class="col-sm-12">
+                    <h4>Menu Access</h4>
+                </div>
+                <div class="col-sm-12">
+                    <div class="panel-group" id="accordion">
+                        @foreach (var item in Model.Menus.Where(m => m.ParentId == null))
+                        {
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">
+                                        <input type="checkbox" name="SelectedMenus" class="parent-menu" checked="@Model.SelectedMenus.Contains(item.MenuId)" value="@item.MenuId" />
+                                        <label data-toggle="collapse" data-parent="#accordion" data-target="@string.Concat("#lnk", item.MenuId)">
+                                            @item.MenuName
+                                        </label>
+                                    </h4>
+                                </div>
+                                <div id="@string.Concat("lnk", item.MenuId)" class="panel-collapse collapse">
+                                    <div class="panel-body">
+                                        <ul class="list-group">
+                                            @foreach (var m in Model.Menus.Where(m => m.ParentId == item.MenuId))
+                                            {
+                                                <li class="list-group-item"><input type="checkbox" name="SelectedMenus" class="child-menu" checked="@Model.SelectedMenus.Contains(m.MenuId)" value="@m.MenuId" />@m.MenuName</li>
+                                            }
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="row top10">
+                <div class="col-sm-12">
+                    <input type="submit" class="btn btn-primary" value="Save" />
+                </div>
+            </div>
+        }
+    </div>
+    <div class="col-sm-2"></div>
+</div>
+@section Scripts {
+    <script type="text/javascript">
+        $(function () {
+            $(".parent-menu").click(function () {
+                $(this).parents(".panel").find(".child-menu").prop("checked", $(this).is(":checked"))
+            });
+        })
+    </script>
+}

@@ -1,0 +1,31 @@
+﻿.field-validation-error {
+    color: red;
+}
+
+.input-validation-error {
+    background-color: darksalmon;
+}
+
+.top10 {
+    margin-top:10px;
+}
+
+.date-control {
+    width:50%;
+}
+
+#accordion1 ul, ol {
+  list-style: none;
+}
+
+#accordion1 li.panel{
+    margin-bottom: 0px;
+}
+
+.panel-title {
+    font-size:15px;
+}
+
+.bottom10 {
+    margin-bottom: 10px;
+}

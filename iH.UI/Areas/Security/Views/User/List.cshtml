@@ -1,0 +1,103 @@
+﻿@using iH.Domain.Security.Entities
+@using iH.ViewModels;
+
+@model List<SecurityUser>
+
+@{
+    ViewBag.Title = "List Users";
+}
+
+<div class="row">
+    <div class="col-sm-1"></div>
+    <div class="col-sm-10">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="bottom10">
+                    <form class="form form-inline" role="form">
+                        <div class="form-group">
+                            <label for="search">Search Users:</label>
+                            @if (ViewBag.SelectedUser != null)
+                            {
+                                <input id="search" type="text" value="@ViewBag.SelectedUser.UserName" />
+                            }
+                            else
+                            {
+                                <input id="search" type="text" />
+                            }
+                        </div>
+                        <div class="form-group">
+                            <a href="/Security/User/List">Clear Search</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th style="width:85%">User Name</th>
+                        <th style="width:15%"></th>
+                        <th style="width:10%"></th>
+                    </tr>
+                    @foreach (SecurityUser user in Model)
+                    {
+                        <tr>
+                            <td>@user.UserName</td>
+                            <td>
+                                <a href="@Url.Action("ChangePassword", new { id = user.UserId })">Change Password</a>
+                            </td>
+                            <td>
+                                <a href="@Url.Action("ChangeRoles", new { id = user.UserId })">Roles</a>
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <ul class="pagination justify-content-center">
+                    @{ PagingViewModel paging = ViewBag.Paging as PagingViewModel;
+                        if (paging != null)
+                        {
+                            <li class="@(paging.HasPrevious ? "page-item" : "page-item disabled")">
+                                <a href="@Url.Action("List", new { page = paging.Previous })" class="page-link">Previous</a>
+                            </li>
+                            foreach (int page in paging.Paging)
+                            {
+                                <li class="page-item">
+                                    <a href="@Url.Action("List", new { page = page })" class="page-link">@page</a>
+                                </li>
+                            }
+                            <li class="@(paging.HasNext ? "page-item" : "page-item disabled")">
+                                <a href="@Url.Action("List", new { page = paging.Next })" class="page-link">Next</a>
+                            </li>
+                        }
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-1"></div>
+</div>
+
+@section Scripts {
+    <script src="~/Scripts/bootstrap3-typeahead.js"></script>
+    <script type="text/javascript">
+
+        $("#search").typeahead({
+            source: function (query, process) {
+                return $.getJSON("/Security/User/SearchUsers", { query: query }, function (data) {
+                    return process(data);
+                });
+            },
+            displayText: function (item) {
+                return item.UserName;
+            },
+            afterSelect: function (item) {
+                window.location.assign("/Security/User/ListUser/" + item.UserId);
+            }
+        });
+    </script>
+}

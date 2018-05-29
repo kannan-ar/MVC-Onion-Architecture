@@ -1,0 +1,53 @@
+﻿
+@{
+    ViewBag.Title = "Employee View";
+}
+
+@section Styles
+{
+    <link rel="stylesheet" type="text/css" href="~/Content/jquery.dataTables.min.css" />
+}
+
+<div class="row">
+    <div class="col-sm-1"></div>
+    <div class="col-sm-10">
+        <table id="employeeList" class="display" cellspacing="0" width="100%">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Designation</th>
+                    <th>Department</th>
+                    <th>User</th>
+                    <th>Edit</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+    <div class="col-sm-1"></div>
+</div>
+
+@section Scripts
+{
+    <script type="text/javascript" src="~/Scripts/datatables.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#employeeList').DataTable({
+                "processing": true,
+                "serverSide": true,
+                "ajax": "/api/Employee/List",
+                "order": [[0, 'asc']],
+                "columns": [
+                    { "title": "Employee Name", width: "30%" },
+                    { "title": "Designation", width: "25%" },
+                    { "title": "Department", width: "25%" },
+                    { "title": "User", width: "10%" },
+                    {
+                        "title": "Edit", orderable: false, width: "10%", "render": function (data, type, row, meta) {
+                            return "<a href='/HR/Employee/" + data + "'>Edit</a>"
+                        }
+                    }
+                ]
+            });
+        });
+    </script>
+}
