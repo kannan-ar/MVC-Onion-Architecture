@@ -1,4 +1,5 @@
-﻿
+﻿var rm = null;
+
 var SalaryRevisionDefinition = function (defId, amount) {
     var self = this;
 
@@ -15,13 +16,24 @@ var SalaryRevision = function (revisionId, revisedOn, revisedBy) {
 }
 
 var RevisionDetail = function (definitionId, amount) {
+    var self = this;
+
     self.definitionId = ko.observable(definitionId);
     self.amount = ko.observable(amount);
-    self.selectedDef = ko.observable(new SalaryDefinition(definitionId, 0, "HRA1"));
+    self.selectedDef = ko.observable();
+
+    ko.utils.arrayForEach(rm.DefinitionList(), function (definition) {
+        if (definition.definitionId() == definitionId) {
+            self.selectedDef = ko.observable(definition);
+        }
+    });
 }
+
 
 var revisionModel = function () {
     var self = this;
+    rm = this;
+    self.revisionId = 0;
 
     self.EmployeeName = ko.observable(null);
     self.Designation = ko.observable(null);
@@ -45,7 +57,10 @@ var revisionModel = function () {
     }
 
     self.load = function (employeeId) {
+        self.employeeId = employeeId;
+
         $.getJSON("/api/Revision/List", { id: employeeId }, function (revList) {
+            self.RevisionList.removeAll();
 
             $.each(revList, function (index, value) {
                 if (index == 0) {
@@ -54,12 +69,21 @@ var revisionModel = function () {
                     self.Department(value.Employee.Department.DepartmentName);
                     self.Location(value.Employee.Location.LocationName);
                 }
+
                 self.RevisionList.push(new SalaryRevision(value.RevisionId, value.RevisedOn, value.RevisedEmployee.EmployeeName));
             });
         });
     }
 
-    self.addRevision = function (data) {
+    self.addRevision = function () {
+        self.RevisionDetails.removeAll();
+        $("#revisionModal").modal();
+    }
+
+    self.editRevision = function (data) {
+        self.RevisionDetails.removeAll();
+        self.revisionId = data.revisionId();
+
         $.getJSON("/api/Revision/Details", { id: data.revisionId() }, function (revList) {
             $.each(revList, function (index, value) {
                 self.RevisionDetails.push(new RevisionDetail(value.DefinitionId, value.Amount));
@@ -69,7 +93,37 @@ var revisionModel = function () {
         $("#revisionModal").modal();
     }
 
-    self.removeDefinition = function () {
+    self.saveRevision = function () {
+        var revisionDetails = [];
+        ko.utils.arrayForEach(self.RevisionDetails(), function (revision) {
+            revisionDetails.push(
+                {
+                    RevisionId: self.revisionId,
+                    DefinitionId: revision.definitionId(),
+                    Amount: revision.amount()
+                })
+        });
 
+        $.ajax({
+            dateType: "json",
+            contentType: "application/json",
+            method: "POST",
+            url: "/api/Revision/Save",
+            data: JSON.stringify(revisionDetails),
+            success: function (result) {
+                $('#revisionModal').modal('hide');
+            },
+            error: function (jqXHR, exception) {
+                console.log(exception);
+            }
+        })
+    }
+
+    self.removeDefinition = function () {
+        self.RevisionDetails.remove(this);
+    }
+
+    self.addDefinition = function () {
+        self.RevisionDetails.push(new RevisionDetail(0, 0));
     }
 }

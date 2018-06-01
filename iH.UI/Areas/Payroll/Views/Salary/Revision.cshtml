@@ -59,7 +59,7 @@
                 <tr>
                     <td data-bind="text: revisedOn"></td>
                     <td data-bind="text: revisedBy"></td>
-                    <td><a href="#" data-bind="click: $root.addRevision">Edit</a></td>
+                    <td><a href="#" data-bind="click: $root.editRevision">Edit</a></td>
                 </tr>
             </tbody>
         </table>
@@ -84,13 +84,16 @@
                             <input type="text" class="form-control" data-bind="value: amount" />
                         </div>
                         <div class="col-sm-2">
-                            <!--<a href="#" data-bind="click: $.root.removeDefinition">Remove</a>-->
+                            <a href="#" data-bind="click: $parent.removeDefinition">Remove</a>
                         </div>
                     </div>
                 </form>
+                <div>
+                    <a href="#" data-bind="click: addDefinition">Add</a>
+                </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary">Save</button>
+                <button type="button" class="btn btn-primary" data-bind="click: saveRevision">Save</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
             </div>
         </div>

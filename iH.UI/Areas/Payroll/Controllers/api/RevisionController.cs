@@ -2,9 +2,12 @@
 {
     using System;
     using System.Web.Http;
+    using System.Collections.Generic;
 
     using Domain.Security.Entities;
     using Domain.Payroll.Services;
+    using Domain.Payroll.Entities;
+    using iH.ViewModels;
 
     public class RevisionController : ApiController
     {
@@ -31,6 +34,14 @@
         {
             var result = revisionService.GetRevisionDetails(id);
             return Json(result);
+        }
+
+        [Authorize(Roles = PermissionLevels.PayrollManager)]
+        [HttpPost]
+        public IHttpActionResult Save(List<SalaryRevisionDetails> details)
+        {
+            revisionService.SaveRevisionDetails(details);
+            return Ok();
         }
     }
 }

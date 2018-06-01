@@ -8,6 +8,5 @@
         public Int64 DefinitionId { get; set; }
         public decimal Amount { get; set; }
         public SalaryDefinition Definition { get; set; }
-
     }
 }

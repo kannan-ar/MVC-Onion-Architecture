@@ -25,5 +25,10 @@
         {
             return repository.GetRevisionDetails(revisionId);
         }
+
+        public void SaveRevisionDetails(List<SalaryRevisionDetails> details)
+        {
+            repository.SaveRevisionDetails(details);
+        }
     }
 }

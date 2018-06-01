@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using Newtonsoft.Json;
 
     using MariGold.Data;
 
@@ -9,8 +10,7 @@
     using Domain.Payroll.Entities;
     using Domain.Employee.Entities;
     using Domain.Core.Repositories;
-
-
+    using Newtonsoft.Json.Serialization;
 
     public class RevisionRepository : Repository, IRevisionRepository
     {
@@ -52,6 +52,44 @@
             {
                 return conn.GetList<SalaryRevisionDetails>("select definition_id, amount from payroll.revision_details where revision_id = @revision_id",
                     new { revision_id = revisionId });
+            }
+        }
+
+        public void SaveRevisionDetails(List<SalaryRevisionDetails> details)
+        {
+            if (details == null && details.Count == 0)
+            {
+                return;
+            }
+
+            using (var conn = db.Connection)
+            {
+                //var transation = conn.BeginTransaction();
+
+                try
+                {
+                    var dezerializerSettings = new JsonSerializerSettings
+                    {
+                        ContractResolver = new DefaultContractResolver
+                        {
+                            NamingStrategy = new SnakeCaseNamingStrategy()
+                        }
+                    };
+
+                    conn.Execute("delete from payroll.revision_details where revision_id = @revision_id",
+                        new { revision_id = details[0].RevisionId });
+
+                   // transaction.Commit();
+
+                    conn.Execute(string.Concat("insert into payroll.revision_details(revision_id, definition_id, amount) select revision_id, definition_id, amount from json_populate_recordset(null::payroll.revision_details, '",
+                        JsonConvert.SerializeObject(details, dezerializerSettings), "')"));
+
+                }
+                catch(Exception ex)
+                {
+                   // transaction.Rollback();
+                }
+
             }
         }
     }
