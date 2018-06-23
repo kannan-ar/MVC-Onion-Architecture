@@ -17,5 +17,6 @@
         void UpdateUser(Int64 employeeId, ISecurityUserService userService, SecurityUser user, int[] roles);
         Employee Get(Int64 employeeId);
         void Update(Employee employee);
+        Employee Detail(Int64 employeeId);
     }
 }

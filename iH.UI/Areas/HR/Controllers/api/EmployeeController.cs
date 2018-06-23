@@ -1,5 +1,6 @@
 ﻿namespace iH.UI.Areas.HR.Controllers.api
 {
+    using System;
     using System.Collections.Generic;
     using System.Web.Http;
 
@@ -10,10 +11,12 @@
 
     public class EmployeeController : ApiController
     {
+        private readonly IEmployeeService employeeService;
         private readonly IEmployeeSearchService searchService;
 
-        public EmployeeController(IEmployeeSearchService searchService)
+        public EmployeeController(IEmployeeService employeeService, IEmployeeSearchService searchService)
         {
+            this.employeeService = employeeService;
             this.searchService = searchService;
         }
 
@@ -51,6 +54,13 @@
         public IHttpActionResult List(string query)
         {
             return Json(searchService.Search(10, query));
+        }
+
+        [Authorize(Roles = PermissionLevels.EmployeeManager)]
+        [HttpGet]
+        public IHttpActionResult Detail(Int64 employeeId)
+        {
+            return Json(employeeService.Detail(employeeId));
         }
     }
 }

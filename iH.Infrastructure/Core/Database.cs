@@ -6,8 +6,6 @@
     using MariGold.Data;
 
     using Repo = Domain.Core.Repositories;
-    using System;
-    using Domain.Core.Repositories;
 
     public class Database : Repo.IHDatabase
     {
@@ -29,7 +27,10 @@
         {
             get
             {
-                return GetConnection();
+                var conn = new NpgsqlConnection(connectionString);
+
+                conn.Open();
+                return conn;
             }
         }
 

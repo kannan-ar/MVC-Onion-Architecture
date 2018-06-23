@@ -34,6 +34,7 @@ var revisionModel = function () {
     var self = this;
     rm = this;
     self.revisionId = 0;
+    self.employeeId = 0;
 
     self.EmployeeName = ko.observable(null);
     self.Designation = ko.observable(null);
@@ -58,18 +59,18 @@ var revisionModel = function () {
 
     self.load = function (employeeId) {
         self.employeeId = employeeId;
-
+        
+        $.getJSON("/api/Employee/Detail", { employeeId: employeeId }, function (employee) {
+            self.EmployeeName(employee.EmployeeName);
+            self.Designation(employee.Designation.DesignationName);
+            self.Department(employee.Department.DepartmentName);
+            self.Location(employee.Location.LocationName);
+        });
+        
         $.getJSON("/api/Revision/List", { id: employeeId }, function (revList) {
             self.RevisionList.removeAll();
 
             $.each(revList, function (index, value) {
-                if (index == 0) {
-                    self.EmployeeName(value.Employee.EmployeeName);
-                    self.Designation(value.Employee.Designation.DesignationName);
-                    self.Department(value.Employee.Department.DepartmentName);
-                    self.Location(value.Employee.Location.LocationName);
-                }
-
                 self.RevisionList.push(new SalaryRevision(value.RevisionId, value.RevisedOn, value.RevisedEmployee.EmployeeName));
             });
         });
@@ -96,10 +97,12 @@ var revisionModel = function () {
     self.saveRevision = function () {
         var revisionDetails = [];
         ko.utils.arrayForEach(self.RevisionDetails(), function (revision) {
+            console.log(revision.selectedDef());
+
             revisionDetails.push(
                 {
                     RevisionId: self.revisionId,
-                    DefinitionId: revision.definitionId(),
+                    DefinitionId: revision.selectedDef().definitionId(),
                     Amount: revision.amount()
                 })
         });

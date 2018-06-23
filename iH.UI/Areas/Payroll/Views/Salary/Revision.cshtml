@@ -17,13 +17,6 @@
 </div>
 <div class="row" data-bind="if: EmployeeName">
     <div class="col-sm-1"></div>
-    <div class="col-sm-10">
-        <a href="#" data-bind="click: addRevision">Add Revision</a>
-    </div>
-    <div class="col-sm-1"></div>
-</div>
-<div class="row" data-bind="if: EmployeeName">
-    <div class="col-sm-1"></div>
     <div class="col-sm-4 well">
         <div class="row">
             <div class="col-sm-4">Employee Name</div>
@@ -47,22 +40,31 @@
         </div>
     </div>
     <div class="col-sm-6">
-        <table class="table table-bordered table-striped">
-            <thead>
-                <tr>
-                    <th>Revised On</th>
-                    <th>Revised By</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody data-bind="foreach: RevisionList">
-                <tr>
-                    <td data-bind="text: revisedOn"></td>
-                    <td data-bind="text: revisedBy"></td>
-                    <td><a href="#" data-bind="click: $root.editRevision">Edit</a></td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="row">
+            <div class="col-sm-12">
+                <a href="#" data-bind="click: addRevision">Add Revision</a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>Revised On</th>
+                            <th>Revised By</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody data-bind="foreach: RevisionList">
+                        <tr>
+                            <td data-bind="text: revisedOn"></td>
+                            <td data-bind="text: revisedBy"></td>
+                            <td><a href="#" data-bind="click: $root.editRevision">Edit</a></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
     <div class="col-sm-1"></div>
 </div>

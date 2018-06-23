@@ -3,6 +3,8 @@
     using System;
     using System.Collections.Generic;
 
+    using MariGold.Data;
+
     using Domain.Employee.Entities;
     using Domain.Employee.Repositories;
     using Domain.Core.Repositories;
@@ -112,6 +114,22 @@
                 email = employee.Email ?? string.Empty,
                 employee_id = employee.EmployeeId
             });
+        }
+
+        public Employee Detail(Int64 employeeId)
+        {
+            using (var conn = db.Connection)
+            {
+                return conn.Query<Employee>(@"select e.employee_id, e.employee_name, e.department_id, dprt.department_name, e.designation_id, desig.designation_name, e.location_id, loc.location_name from hr.employees e
+                        left outer join hr.departments dprt on e.department_id = dprt.department_id
+                        left outer join hr.designations desig on e.designation_id = desig.designation_id
+                        left outer join hr.locations loc on e.location_id = loc.location_id
+                        where e.employee_id = @employee_id", new { employee_id = employeeId })
+                        .Property<Department>(q => q.Of(e => e.Department))
+                        .Property<Designation>(q => q.Of(e => e.Designation))
+                        .Property<Location>(q => q.Of(e => e.Location))
+                        .Get();
+            }
         }
     }
 }

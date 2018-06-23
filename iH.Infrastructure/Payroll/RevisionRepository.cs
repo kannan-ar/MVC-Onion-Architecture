@@ -20,28 +20,10 @@
         {
             using (var conn = db.Connection)
             {
-                return conn.Query<SalaryRevision>(@"select sr.employee_id, e.employee_name, dprt.department_name, desig.designation_name, loc.location_name,
-                        sr.revision_id, revised_on, rd.definition_id, rd.amount, rb.employee_id remp_id, rb.employee_name remp_name from 
-                        payroll.salary_revision sr inner join payroll.revision_details rd on sr.revision_id = rd.revision_id
-                        inner join hr.employees e on sr.employee_id = e.employee_id
+                return conn.Query<SalaryRevision>(@"select revised_on, rb.employee_id, rb.employee_name from payroll.salary_revision sr
                         left outer join hr.employees rb on sr.revised_by = rb.employee_id
-                        left outer join hr.departments dprt on e.department_id = dprt.department_id
-                        left outer join hr.designations desig on e.designation_id = desig.designation_id
-                        left outer join hr.locations loc on e.location_id = loc.location_id
                         where sr.employee_id = @employeeId", new { employeeId = employeeId })
-                    .Group(r => r.RevisionId)
-                    .Property<Employee>(r => r.Of(e => e.Employee))
-                    .Property<Department>(r => r.Of(e => e.Employee).Of(d => d.Department), m => m.Map("department_name", d => d.DepartmentName))
-                    .Property<Designation>(r => r.Of(e => e.Employee).Of(d => d.Designation), m => m.Map("designation_name", d => d.DesignationName))
-                    .Property<Location>(r => r.Of(e => e.Employee).Of(l => l.Location), m => m.Map("location_name", d => d.LocationName))
-                    .Property<Employee>(r => r.Of(e => e.RevisedEmployee), m => m.Map("remp_id", rb => rb.EmployeeId).Map("remp_name", rb => rb.EmployeeName))
-                    .Property<SalaryRevisionDetails>(r => r.Of(sr => sr.Details), filter => filter(f => f.RevisionId))
-                    //.Single<Employee>(e => e.Employee)
-                    //.Single<Employee, Department>(e => e.Department, m => m.Map("department_name", d => d.DepartmentName))
-                    //.Single<Designation>(e => e.Employee.Designation, m => m.Map("designation_name", d => d.DesignationName))
-                    //.Single<Location>(e => e.Employee.Location, m => m.Map("location_name", d => d.LocationName))
-                    //.Single<Employee>(e => e.RevisedEmployee, m => m.Map("remp_id", rb => rb.EmployeeId).Map("remp_name", rb => rb.EmployeeName))
-                    //.Many<SalaryRevisionDetails>(e => e.Details, filter => filter(f => f.RevisionId))
+                    .Property<Employee>(r => r.Of(e => e.RevisedEmployee))
                     .GetList();
             }
         }
@@ -76,8 +58,17 @@
                         }
                     };
 
-                    conn.Execute("delete from payroll.revision_details where revision_id = @revision_id",
-                        new { revision_id = details[0].RevisionId });
+                    Int64 revisionId = details[0].RevisionId;
+
+                    if (revisionId != 0)
+                    {
+                        conn.Execute("delete from payroll.revision_details where revision_id = @revision_id",
+                            new { revision_id = details[0].RevisionId });
+                    }
+                    else
+                    {
+
+                    }
 
                    // transaction.Commit();
 

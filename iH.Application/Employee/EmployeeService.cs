@@ -79,5 +79,10 @@
         {
             repository.Update(employee);
         }
+
+        public Employee Detail(Int64 employeeId)
+        {
+            return repository.Detail(employeeId);
+        }
     }
 }

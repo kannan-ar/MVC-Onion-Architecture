@@ -20,5 +20,6 @@
 
         Employee Get(Int64 employeeId);
         void Update(Employee employee);
+        Employee Detail(Int64 employeeId);
     }
 }
