@@ -1,5 +1,6 @@
-﻿namespace iH.UI.ViewModels
+﻿namespace iH.ViewModels
 {
+    using System;
     using System.Collections.Generic;
 
     using Domain.Employee.Entities;
@@ -7,7 +8,7 @@
 
     public class SalaryRevisionViewModel
     {
-        public Employee Employee { get; set; }
-        public IList<SalaryDefinition> RevisionList { get; set; }
+        public Int64 EmployeeId { get; set; }
+        public List<SalaryRevisionDetails> RevisionList { get; set; }
     }
 }

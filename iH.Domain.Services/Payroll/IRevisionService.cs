@@ -9,6 +9,6 @@
     {
         IList<SalaryRevision> GetRevisionByEmployee(Int64 employeeId);
         IList<SalaryRevisionDetails> GetRevisionDetails(Int64 revisionId);
-        void SaveRevisionDetails(List<SalaryRevisionDetails> details);
+        void SaveRevisionDetails(Int64 employeeId, DateTime revisedOn, Int64 revisedBy, List<SalaryRevisionDetails> details);
     }
 }

@@ -37,7 +37,7 @@
             }
         }
 
-        public void SaveRevisionDetails(List<SalaryRevisionDetails> details)
+        public void SaveRevisionDetails(Int64 employeeId, DateTime revisedOn, Int64 revisedBy, List<SalaryRevisionDetails> details)
         {
             if (details == null && details.Count == 0)
             {
@@ -67,7 +67,13 @@
                     }
                     else
                     {
+                        revisionId = Convert.ToInt64(conn.GetScalar("INSERT INTO payroll.salary_revision(employee_id, revised_on, revised_by) VALUES (@employee_id, @revised_on, @revised_by) RETURNING revision_id;",
+                            new { employee_id = employeeId, revised_on = revisedOn, revised_by = revisedBy }));
 
+                        foreach(var detail in details)
+                        {
+                            detail.RevisionId = revisionId;
+                        }
                     }
 
                    // transaction.Commit();

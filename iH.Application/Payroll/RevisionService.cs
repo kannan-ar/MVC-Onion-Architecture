@@ -26,9 +26,9 @@
             return repository.GetRevisionDetails(revisionId);
         }
 
-        public void SaveRevisionDetails(List<SalaryRevisionDetails> details)
+        public void SaveRevisionDetails(Int64 employeeId, DateTime revisedOn, Int64 revisedBy, List<SalaryRevisionDetails> details)
         {
-            repository.SaveRevisionDetails(details);
+            repository.SaveRevisionDetails(employeeId, revisedOn, revisedBy, details);
         }
     }
 }

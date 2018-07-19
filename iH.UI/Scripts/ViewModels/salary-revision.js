@@ -82,6 +82,8 @@ var revisionModel = function () {
     }
 
     self.editRevision = function (data) {
+        console.log(data);
+
         self.RevisionDetails.removeAll();
         self.revisionId = data.revisionId();
 
@@ -89,9 +91,9 @@ var revisionModel = function () {
             $.each(revList, function (index, value) {
                 self.RevisionDetails.push(new RevisionDetail(value.DefinitionId, value.Amount));
             });
-        });
 
-        $("#revisionModal").modal();
+            $("#revisionModal").modal();
+        });
     }
 
     self.saveRevision = function () {
@@ -112,7 +114,7 @@ var revisionModel = function () {
             contentType: "application/json",
             method: "POST",
             url: "/api/Revision/Save",
-            data: JSON.stringify(revisionDetails),
+            data: JSON.stringify({ EmployeeId: self.employeeId, RevisionList: revisionDetails }),
             success: function (result) {
                 $('#revisionModal').modal('hide');
             },

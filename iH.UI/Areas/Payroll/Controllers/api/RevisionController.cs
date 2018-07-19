@@ -2,12 +2,11 @@
 {
     using System;
     using System.Web.Http;
-    using System.Collections.Generic;
 
     using Domain.Security.Entities;
     using Domain.Payroll.Services;
-    using Domain.Payroll.Entities;
     using iH.ViewModels;
+    using Code;
 
     public class RevisionController : ApiController
     {
@@ -38,9 +37,9 @@
 
         [Authorize(Roles = PermissionLevels.PayrollManager)]
         [HttpPost]
-        public IHttpActionResult Save(List<SalaryRevisionDetails> details)
+        public IHttpActionResult Save(SalaryRevisionViewModel vm)
         {
-            revisionService.SaveRevisionDetails(details);
+            revisionService.SaveRevisionDetails(vm.EmployeeId, DateTime.Now, iHUser.GetCurrentUserId(), vm.RevisionList);
             return Ok();
         }
     }
