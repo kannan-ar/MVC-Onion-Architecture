@@ -2,6 +2,6 @@
 {
     public class SecurityUserRole : SecurityUser
     {
-        public string Role { get; set; }
+        public string PermissionLevels { get; set; }
     }
 }

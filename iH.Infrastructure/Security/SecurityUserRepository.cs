@@ -16,7 +16,7 @@
 
         public SecurityUser GetByUserName(string userName)
         {
-            IList<SecurityUserRole> list = db.GetList<SecurityUserRole>(@"select u.user_id, u.password, u.salt, r.role_name from security.security_users u
+            IList<SecurityUserRole> list = db.GetList<SecurityUserRole>(@"select u.user_id, u.password, u.salt, r.permission_levels from security.security_users u
                 inner join security.user_roles ur on ur.user_id = u.user_id
                 inner join security.roles r on ur.role_id = r.role_id
                 where user_name = @user_name",
@@ -36,7 +36,7 @@
                     user.Roles = new List<string>();
                 }
 
-                user.Roles.Add(userRole.Role);
+                user.Roles.Add(userRole.PermissionLevels);
             }
 
             return user;

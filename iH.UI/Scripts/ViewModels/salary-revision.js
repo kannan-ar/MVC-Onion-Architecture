@@ -82,7 +82,7 @@ var revisionModel = function () {
     }
 
     self.editRevision = function (data) {
-        console.log(data);
+        console.log(data.revisionId());
 
         self.RevisionDetails.removeAll();
         self.revisionId = data.revisionId();

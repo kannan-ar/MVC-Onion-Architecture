@@ -48,6 +48,21 @@
 
             var identity = new ClaimsIdentity(claims, DefaultAuthenticationTypes.ApplicationCookie);
 
+            foreach (string role in user.Roles)
+            {
+                if (string.IsNullOrEmpty(role))
+                {
+                    continue;
+                }
+
+                string[] permissionLevels = role.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+
+                foreach(string permissionLevel in permissionLevels)
+                {
+                    identity.AddClaim(new Claim(ClaimTypes.Role, permissionLevel));
+                }
+            }
+
             AuthenticationManager.SignIn(new AuthenticationProperties
             {
                 AllowRefresh = true,
@@ -78,7 +93,7 @@
         public ActionResult Index(LoginViewModel model)
         {
             SecurityUser user;
-            
+
             if (userService.Authenticate(model.UserName, model.Password, out user))
             {
                 IdentitySignin(user, model.CompanyId);
