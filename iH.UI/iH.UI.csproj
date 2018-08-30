@@ -295,6 +295,7 @@
     <Compile Include="Areas\Payroll\PayrollAreaRegistration.cs" />
     <Compile Include="Areas\Security\Controllers\LoginController.cs" />
     <Compile Include="Areas\Security\Controllers\MenuController.cs" />
+    <Compile Include="Areas\Security\Controllers\ResourceController.cs" />
     <Compile Include="Areas\Security\Controllers\RoleController.cs" />
     <Compile Include="Areas\Security\Controllers\UserController.cs" />
     <Compile Include="Areas\Security\SecurityAreaRegistration.cs" />
@@ -346,6 +347,7 @@
   <ItemGroup>
     <Folder Include="Areas\HR\Views\Shared\" />
     <Folder Include="Areas\Payroll\Views\Shared\" />
+    <Folder Include="Areas\Security\Views\Resource\" />
     <Folder Include="Areas\Security\Views\Shared\" />
   </ItemGroup>
   <ItemGroup>

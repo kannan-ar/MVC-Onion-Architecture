@@ -1,0 +1,14 @@
+1. Add validation summary in edit pages.
+2. Implement IValidatableObject for server side validation.
+3. Domain entities should be interfaces and implement them on MVC to add data annotations
+4. Implement custom Authorization attribute to validate authorization against the values from database.
+5. Cache the resource permission levels to access from custom authorization attribute.
+6. Use jsonb data column in postgres to store resource permission levels.
+
+7. Use AntiXSS library (outdated? alternatives?). Use javascript encoding.
+8. Validate antiforgery token for cross site scripting.
+9. avoid sensitive json get request.
+10. use http only cookie.
+11. avoid over posting use bind attribute.
+
+

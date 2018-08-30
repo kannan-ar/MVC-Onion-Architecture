@@ -7,7 +7,7 @@ namespace iH.UI
     using Microsoft.Owin.Security.Cookies;
     using Microsoft.AspNet.Identity;
     using System.Web.Helpers;
-    using System.IdentityModel.Claims;
+    using System.Security.Claims;
 
     public class Startup
     {

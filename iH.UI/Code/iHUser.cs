@@ -3,6 +3,7 @@
     using System;
     using System.Security.Claims;
     using System.Web;
+    using System.Collections.Generic;
 
     public static class iHUser
     {
@@ -58,6 +59,21 @@
             }
 
             return companyId;
+        }
+
+        public static List<string> GetCurrentUserRoles()
+        {
+            List<string> roles = new List<string>();
+            ClaimsIdentity claimsIdentity = HttpContext.Current.User.Identity as ClaimsIdentity;
+
+            var claims = claimsIdentity.FindAll(ClaimTypes.Role);
+
+            foreach(var claim in claims)
+            {
+                roles.Add(claim.Value);
+            }
+
+            return roles;
         }
     }
 }

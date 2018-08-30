@@ -20,7 +20,7 @@
         private EmployeeViewModel GetEmployeeViewModel(Int64 id)
         {
             EmployeeViewModel model = default(EmployeeViewModel);
-            
+
             if (id == 0)
             {
                 model = new EmployeeViewModel();
@@ -59,12 +59,11 @@
             this.employeeService = employeeService;
         }
 
-        //[HandleError]
         [Authorize(Roles = PermissionLevels.EmployeeManager)]
         [HttpGet]
-        public ActionResult Index(int id)
+        public ActionResult Index(Int64? id)
         {
-            EmployeeViewModel model = GetEmployeeViewModel(id);
+            EmployeeViewModel model = GetEmployeeViewModel(id ?? 0);
 
             if (model != null)
             {
@@ -72,38 +71,53 @@
             }
             else
             {
-                TempData[iHSettings.ErrorMessage] = "";
-               // throw new HttpException(404, "Not found");
-                 return HttpNotFound("Employee Not Found");
-                //return Redirect("~/Error/NotFound");
-
+                return HttpNotFound("Employee Not Found");
             }
         }
 
         [Authorize(Roles = PermissionLevels.EmployeeManager)]
         [ValidateAntiForgeryToken]
         [HttpPost]
-        public ActionResult Index(Int64 id, EmployeeViewModel model)
+        public ActionResult Index(Int64? id, EmployeeViewModel model)
         {
-            Employee emp = Mapper.Map<Employee>(model);
-
-            if (id == 0)
+            if (ModelState.IsValid)
             {
-                id = employeeService.Save(emp);
+                Employee emp = Mapper.Map<Employee>(model);
+                
+                if (id == 0)
+                {
+                    Dictionary<string, string> messages;
+
+                    if(!employeeService.IsValidNewEmployee(emp, out messages))
+                    {
+                        foreach(var message in messages)
+                        {
+                            ModelState.AddModelError(message.Key, message.Value);
+                        }
+
+                        return Index(id);
+                    }
+
+                    id = employeeService.Save(emp);
+                }
+                else
+                {
+                    emp.EmployeeId = id ?? 0;
+                    employeeService.Update(emp);
+                }
+
+                if (model.CreateUser)
+                {
+                    return Redirect(Url.Action("Register", "User", new { area = "Security", employeeId = id }));
+                }
+                else
+                {
+                    return RedirectToAction("List");
+                }
             }
             else
             {
-                emp.EmployeeId = id;
-                employeeService.Update(emp);
-            }
-
-            if (model.CreateUser)
-            {
-                return Redirect(Url.Action("Register", "User", new { area = "Security", employeeId = id }));
-            }
-            else
-            {
-                return RedirectToAction("List");
+                return Index(id);
             }
         }
 

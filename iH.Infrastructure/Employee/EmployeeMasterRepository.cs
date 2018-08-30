@@ -87,6 +87,14 @@
                 WHERE employee_id = @employee_id", new { employee_id = employeeId });
         }
 
+        public Employee Get(string employeeNo)
+        {
+            return db.Get<Employee>(@"SELECT employee_id, employee_name, employee_no, gender, permanent_address, 
+                communication_address, nationality_id, permanent_city_id, communication_city_id, status, designation_id, 
+                department_id, location_id, card_number, date_of_join, offcial_dob, email, user_id FROM hr.employees
+                WHERE employee_no = @employee_no", new { employee_no = employeeNo });
+        }
+
         public void Update(Employee employee)
         {
             db.Execute(@"UPDATE hr.employees

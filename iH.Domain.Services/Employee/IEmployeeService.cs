@@ -13,6 +13,7 @@
         void GetEmployeeDetails(out IList<Nationality> nationalities, out IList<City> cities,
             out IList<EmployeeStatus> employeeStatus, out IList<Department> departments, out IList<Designation> designations,
             out IList<Location> locations);
+        bool IsValidNewEmployee(Employee employee, out Dictionary<string, string> messages);
         Int64 Save(Employee employee);
         void UpdateUser(Int64 employeeId, ISecurityUserService userService, SecurityUser user, int[] roles);
         Employee Get(Int64 employeeId);

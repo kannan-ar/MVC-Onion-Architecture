@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using Domain.Employee.Entities;
+    using Domain.Employee.Services;
 
     public class EmployeeViewModel
     {

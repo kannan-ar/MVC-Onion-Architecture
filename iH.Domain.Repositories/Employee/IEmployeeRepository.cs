@@ -19,6 +19,7 @@
         void UpdateUser(Int64 employeeId, Int64 userId);
 
         Employee Get(Int64 employeeId);
+        Employee Get(string employeeNo);
         void Update(Employee employee);
         Employee Detail(Int64 employeeId);
     }
